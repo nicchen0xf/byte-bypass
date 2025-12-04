@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitelists - ByteForce</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-shield-alt"></i> ByteForce
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html" class="nav-link">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="whitelists.html" class="nav-link active">
+                <i class="fas fa-list"></i> Whitelists
+            </a>
+            <a href="#" id="nav-admin-resellers" class="nav-link" style="display: none;">
+                <i class="fas fa-users"></i> Resellers
+            </a>
+        </div>
+        <div class="nav-user">
+            <span id="username-display"></span>
+            <span id="balance-display"></span>
+            <button onclick="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Whitelists Management</h1>
+            <button onclick="showAddModal()" class="btn-primary">
+                <i class="fas fa-plus"></i> Add UID
+            </button>
+        </div>
+        
+        <div class="filters">
+            <select id="filter-region" onchange="loadWhitelists()">
+                <option value="all">All Regions</option>
+                <option value="IND">IND</option>
+                <option value="BD">BD</option>
+                <option value="BR">BR</option>
+                <option value="ME">ME</option>
+                <option value="VN">VN</option>
+                <option value="TH">TH</option>
+                <option value="CIS">CIS</option>
+                <option value="PK">PK</option>
+                <option value="SG">SG</option>
+                <option value="NA">NA</option>
+                <option value="SAC">SAC</option>
+                <option value="EU">EU</option>
+                <option value="TW">TW</option>
+            </select>
+            
+            <select id="filter-status" onchange="loadWhitelists()">
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="expired">Expired</option>
+            </select>
+        </div>
+        
+        <div class="table-container">
+            <table id="whitelists-table">
+                <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Region</th>
+                        <th>Seller</th>
+                        <th>Duration</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                        <th>Expires</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="whitelists-body">
+                    <!-- Whitelists will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Add UID Modal -->
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Add New UID</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="addForm">
+                <div class="form-group">
+                    <label for="add_uid">UID</label>
+                    <input type="text" id="add_uid" name="uid" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="add_region">Region</label>
+                    <select id="add_region" name="region" required>
+                        <option value="">Select Region</option>
+                        <option value="IND">IND</option>
+                        <option value="BD">BD</option>
+                        <option value="BR">BR</option>
+                        <option value="ME">ME</option>
+                        <option value="VN">VN</option>
+                        <option value="TH">TH</option>
+                        <option value="CIS">CIS</option>
+                        <option value="PK">PK</option>
+                        <option value="SG">SG</option>
+                        <option value="NA">NA</option>
+                        <option value="SAC">SAC</option>
+                        <option value="EU">EU</option>
+                        <option value="TW">TW</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="reseller-group" style="display: none;">
+                    <label for="add_reseller">Assign to Reseller</label>
+                    <select id="add_reseller" name="reseller_id" onchange="updateDurations()">
+                        <option value="">Select Reseller</option>
+                        <option value="admin_free">⭐ Admin-Free (No Cost)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="add_duration">Duration & Price</label>
+                    <select id="add_duration" name="duration" required>
+                        <option value="">Select Duration</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add UID</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/whitelists.js"></script>
+</body>
+</html>

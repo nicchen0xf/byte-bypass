@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseller Dashboard - ByteForce</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>ByteForce</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="reseller_dashboard.html" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="reseller_whitelists.html" class="menu-item">
+                <i class="fas fa-list"></i>
+                <span>My Whitelists</span>
+            </a>
+            <a href="reseller_plans.html" class="menu-item">
+                <i class="fas fa-box"></i>
+                <span>Plans & Pricing</span>
+            </a>
+            <a href="reseller_logs.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Activity Logs</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button onclick="logout()" class="btn-logout-sidebar">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- User Info Panel -->
+        <div class="user-info-panel">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="username-display"></span>
+                <span class="user-role" id="role-display"></span>
+            </div>
+            <div class="user-balance">
+                <i class="fas fa-wallet"></i>
+                <span>Balance: <strong id="balance-display">$0.00</strong></span>
+            </div>
+        </div>
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Reseller Dashboard</h1>
+                <p class="page-subtitle">Manage your whitelists and view statistics</p>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #3b82f6;">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Total UIDs</div>
+                    <div class="stat-value" id="total-uids">-</div>
+                </div>
+            </div>
+            
+            <div class="stat-card success">
+                <div class="stat-icon" style="color: #10b981;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Active UIDs</div>
+                    <div class="stat-value" id="active-uids">-</div>
+                </div>
+            </div>
+            
+            <div class="stat-card warning">
+                <div class="stat-icon" style="color: #f59e0b;">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Paused UIDs</div>
+                    <div class="stat-value" id="paused-uids">-</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #8b5cf6;">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value" id="balance-stat">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions">
+                    <a href="reseller_whitelists.html" class="quick-action-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Whitelist</span>
+                    </a>
+                    <a href="reseller_plans.html" class="quick-action-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Buy Plan</span>
+                    </a>
+                    <a href="reseller_logs.html" class="quick-action-btn">
+                        <i class="fas fa-history"></i>
+                        <span>View Logs</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Check auth
+        checkAuth('reseller');
+        
+        // Load dashboard stats
+        async function loadStats() {
+            try {
+                const data = await apiCall(API.DASHBOARD_STATS);
+                const user = JSON.parse(localStorage.getItem('user'));
+                
+                document.getElementById('total-uids').textContent = data.stats.total_uids;
+                document.getElementById('active-uids').textContent = data.stats.active_uids;
+                document.getElementById('paused-uids').textContent = data.stats.paused_uids;
+                document.getElementById('balance-stat').textContent = '$' + data.stats.balance.toFixed(2);
+                document.getElementById('balance-display').textContent = '$' + data.stats.balance.toFixed(2);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        loadStats();
+    </script>
+</body>
+</html>
